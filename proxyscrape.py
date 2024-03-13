@@ -4,7 +4,7 @@ import concurrent.futures
 
 app = Flask(__name__)
 
-LINES_PER_PAGE = 10000
+LINES_PER_PAGE = 5000
 
 def scrape_proxies(url):
     try:
