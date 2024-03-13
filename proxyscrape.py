@@ -4,6 +4,8 @@ import concurrent.futures
 
 app = Flask(__name__)
 
+LINES_PER_PAGE = 10000
+
 def scrape_proxies(url):
     try:
         response = requests.get(url, timeout=30)
@@ -21,6 +23,11 @@ def process_proxy_list(urls):
             all_proxies.extend(proxies)
     return all_proxies
 
+def paginate_proxies(proxies, page):
+    start = (page - 1) * LINES_PER_PAGE
+    end = start + LINES_PER_PAGE
+    return proxies[start:end]
+    
 # Substitua com os URLs dos seus proxies
 http_urls = http_urls = [
     "https://api.proxyscrape.com/?request=getproxies&proxytype=https&timeout=10000&country=all&ssl=all&anonymity=all",
@@ -89,20 +96,22 @@ socks5_urls = [
     "https://raw.githubusercontent.com/zloi-user/hideip.me/main/socks5.txt"
 ]
 
-@app.route('/http')
-def http_proxies():
+@app.route('/http/<int:page>')
+def http_proxies(page):
     proxies = process_proxy_list(http_urls)
     return Response('\n'.join(proxies), mimetype='text/plain')
 
-@app.route('/socks4')
-def socks4_proxies():
+@app.route('/socks4/<int:page>')
+def socks4_proxies(page):
     proxies = process_proxy_list(socks4_urls)
-    return Response('\n'.join(proxies), mimetype='text/plain')
+    page_proxies = paginate_proxies(proxies, page)
+    return Response('\n'.join(page_proxies), mimetype='text/plain')
 
-@app.route('/socks5')
-def socks5_proxies():
+@app.route('/socks5/<int:page>')
+def socks5_proxies(page):
     proxies = process_proxy_list(socks5_urls)
-    return Response('\n'.join(proxies), mimetype='text/plain')
+    page_proxies = paginate_proxies(proxies, page)
+    return Response('\n'.join(page_proxies), mimetype='text/plain')
 
 if __name__ == '__main__':
     app.run(debug=True)
