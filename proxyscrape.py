@@ -1,16 +1,18 @@
 from flask import Flask, Response
 import requests
 import concurrent.futures
+import re
 
 app = Flask(__name__)
 
-LINES_PER_PAGE = 1000
+LINES_PER_PAGE = 10000
+IP_PORT_PATTERN = r"^\d{1,3}(\.\d{1,3}){3}:\d+$"  # Padrão para validar IP:Porta
 
 def scrape_proxies(url):
     try:
         response = requests.get(url, timeout=30)
         proxies = response.text.splitlines()
-        return proxies
+        return [proxy for proxy in proxies if re.match(IP_PORT_PATTERN, proxy)]
     except requests.exceptions.RequestException as e:
         print(f"Erro ao acessar {url}: {e}")
         return []
@@ -99,7 +101,8 @@ socks5_urls = [
 @app.route('/http/<int:page>')
 def http_proxies(page):
     proxies = process_proxy_list(http_urls)
-    return Response('\n'.join(proxies), mimetype='text/plain')
+    page_proxies = paginate_proxies(proxies, page)
+    return Response('\n'.join(page_proxies), mimetype='text/plain')
 
 @app.route('/socks4/<int:page>')
 def socks4_proxies(page):
