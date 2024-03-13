@@ -5,7 +5,7 @@ import re
 
 app = Flask(__name__)
 
-LINES_PER_PAGE = 10000
+LINES_PER_PAGE = 5000
 IP_PORT_PATTERN = r"^\d{1,3}(\.\d{1,3}){3}:\d+$"  # Padrão para validar IP:Porta
 
 def scrape_proxies(url):
