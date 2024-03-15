@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proxy Dashboard</title>
+    <link href="/static/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <h1>Proxy Dashboard</h1>
+    <div id="stats"></div>
+    
+    <!-- Botões para redirecionar para as APIs -->
+    <button onclick="window.location.href='/http/1';">HTTP Proxies API</button>
+    <button onclick="window.location.href='/socks4/1';">SOCKS4 Proxies API</button>
+    <button onclick="window.location.href='/socks5/1';">SOCKS5 Proxies API</button>
+
+    <script>
+        function loadStats() {
+            fetch('/stats')
+                .then(response => response.json())
+                .then(data => {
+                    const statsElement = document.getElementById('stats');
+                    statsElement.innerHTML = `
+                        <p>HTTP Proxies: ${data.http}</p>
+                        <p>SOCKS4 Proxies: ${data.socks4}</p>
+                        <p>SOCKS5 Proxies: ${data.socks5}</p>
+                        <p>Next Update in: ${data.next_update} seconds</p>
+                    `;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        
+        window.onload = loadStats;
+    </script>
+</body>
+</html>

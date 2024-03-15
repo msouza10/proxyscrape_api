@@ -1,0 +1,35 @@
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #333; /* Cor de fundo mais suave */
+    color: #ddd; /* Cor do texto */
+}
+
+#stats {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #444; /* Cor de fundo do painel de estatísticas */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    max-width: 600px; /* Limitar a largura do painel */
+}
+
+button {
+    background-color: #556677; /* Cor de fundo do botão */
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Animação suave */
+}
+
+button:hover {
+    background-color: #6a8da8; /* Cor do botão ao passar o mouse */
+    transform: scale(1.05); /* Aumentar ligeiramente o botão */
+}
+
+h1 {
+    color: #aabbcc; /* Cor do título */
+}
